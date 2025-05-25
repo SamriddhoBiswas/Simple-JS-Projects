@@ -9,7 +9,7 @@ Collection of simple JS projects 👨‍💻
 | Project_04    | Drag-Drop Kanban Board   | HTML, CSS, JavaScript    | [Live App](https://samriddhobiswas.github.io/Simple-JS-Projects/Project_04/)    |
 | Project_05    | Rock Paper Scissor       | HTML, CSS, JavaScript    | [Live Game](https://samriddhobiswas.github.io/Simple-JS-Projects/Project_05/)    |
 | Project_06    | Weather App              | HTML, CSS, JavaScript    | [Live App](https://samriddhobiswas.github.io/Simple-JS-Projects/Project_06/)    |
-| Project_07    | Currency Converter       | HTML, CSS, JavaScript    | [Live App](https://samriddhobiswas.github.io/Simple-JS-Projects/Project_07/)currency-converter-02    |
+| Project_07    | Currency Converter       | HTML, CSS, JavaScript    | [Live App](https://samriddhobiswas.github.io/Simple-JS-Projects/Project_07/currency-converter-02)    |
 | Project_08    | Password Generator       | HTML, CSS, JavaScript    | [Live App](https://samriddhobiswas.github.io/Simple-JS-Projects/Project_08/)    |
 | Project_09    | Palindrome Checker       | HTML, CSS, JavaScript    | [Live App](https://samriddhobiswas.github.io/Simple-JS-Projects/Project_09/)    |
 | Project_10    | Date Formatter           | HTML, CSS, JavaScript    | [Live App](https://samriddhobiswas.github.io/Simple-JS-Projects/Project_10/)    |
