@@ -1,109 +1,69 @@
-const calorieCounter = document.getElementById("calorie-counter");
-const budgetNumberInput = document.getElementById("budget");
-const entryDropdown = document.getElementById("entry-dropdown");
-const clearButton = document.getElementById("clear");
-const output = document.getElementById("output");
-const addEntryButton = document.getElementById("add-entry");
+const generateBtn = document.getElementById("generate-btn");
+const paletteContainer = document.querySelector(".palette-container");
 
-let isError = false;
+generateBtn.addEventListener("click", generatePalette);
 
-function cleanInputString(str) {
-  const regex = /[+-\s]/g;
-  return str.replace(regex, "");
-}
+paletteContainer.addEventListener("click", function (e) {
+  if (e.target.classList.contains("copy-btn")) {
+    const hexValue = e.target.previousElementSibling.textContent;
 
-function isInvalidInput(str) {
-  const regex = /\d+e\d+/i;
-  return str.match(regex);
-}
-
-function addEntry() {
-  const targetInputContainer = document.querySelector(
-    `#${entryDropdown.value} .input-container`
-  );
-  const entryNumber =
-    targetInputContainer.querySelectorAll('input[type="text"]').length + 1;
-  const HTMLString = `
-  <label for="${entryDropdown.value}-${entryNumber}-name">Entry ${entryNumber} Name</label>
-  <input type="text" placeholder="Name" id="${entryDropdown.value}-${entryNumber}-name">
-  <label for="${entryDropdown.value}-${entryNumber}-calories">Entry ${entryNumber} Calories</label>
-  <input type="number" min="0" placeholder="Calories" id="${entryDropdown.value}-${entryNumber}-calories">
-  `;
-  targetInputContainer.insertAdjacentHTML("beforeend", HTMLString);
-}
-
-function calculateCalories(e) {
-  e.preventDefault();
-  isError = false;
-
-  const breakfastNumberInputs = document.querySelectorAll(
-    "#breakfast input[type=number]"
-  );
-  const lunchNumberInputs = document.querySelectorAll(
-    "#lunch input[type=number]"
-  );
-  const dinnerNumberInputs = document.querySelectorAll(
-    "#dinner input[type=number]"
-  );
-  const snacksNumberInputs = document.querySelectorAll(
-    "#snacks input[type=number]"
-  );
-  const exerciseNumberInputs = document.querySelectorAll(
-    "#exercise input[type=number]"
-  );
-  const breakfastCalories = getCaloriesFromInputs(breakfastNumberInputs);
-  const lunchCalories = getCaloriesFromInputs(lunchNumberInputs);
-  const dinnerCalories = getCaloriesFromInputs(dinnerNumberInputs);
-  const snacksCalories = getCaloriesFromInputs(snacksNumberInputs);
-  const exerciseCalories = getCaloriesFromInputs(exerciseNumberInputs);
-  const budgetCalories = getCaloriesFromInputs([budgetNumberInput]);
-  if (isError) {
-    return;
+    navigator.clipboard
+      .writeText(hexValue)
+      .then(() => showCopySuccess(e.target))
+      .catch((err) => console.log(err));
+  } else if (e.target.classList.contains("color")) {
+    const hexValue = e.target.nextElementSibling.querySelector(".hex-value").textContent;
+    navigator.clipboard
+      .writeText(hexValue)
+      .then(() => showCopySuccess(e.target.nextElementSibling.querySelector(".copy-btn")))
+      .catch((err) => console.log(err));
   }
-  const consumedCalories =
-    breakfastCalories + lunchCalories + dinnerCalories + snacksCalories;
-  const remainingCalories =
-    budgetCalories - consumedCalories + exerciseCalories;
-  const surplusOrDeficit = remainingCalories < 0 ? "Surplus" : "Deficit";
+});
 
-  output.innerHTML = `<span class = "${surplusOrDeficit.toLowerCase()}">${Math.abs(
-    remainingCalories
-  )} Calorie ${surplusOrDeficit}</span>
-    <hr>
-    <p>${budgetCalories} Calories Budgeted</p>
-    <p>${consumedCalories} Calories Consumed</p>
-    <p>${exerciseCalories} Calories Burned</p>`;
+function showCopySuccess(element) {
+  element.classList.remove("far", "fa-copy");
+  element.classList.add("fas", "fa-check");
 
-  output.classList.remove("hide");
+  element.style.color = "#48bb78";
+
+  setTimeout(() => {
+    element.classList.remove("fas", "fa-check");
+    element.classList.add("far", "fa-copy");
+    element.style.color = "";
+  }, 1500);
 }
 
-function getCaloriesFromInputs(list) {
-  let calories = 0;
-  for (const item of list) {
-    const currVal = cleanInputString(item.value);
-    const invalidInputMatch = isInvalidInput(currVal);
-    if (invalidInputMatch) {
-      alert(`Invalid Input: ${invalidInputMatch[0]}`);
-      isError = true;
-      return null;
-    }
-    calories += Number(currVal);
+function generatePalette() {
+  const colors = [];
+
+  for (let i = 0; i < 5; i++) {
+    colors.push(generateRandomColor());
   }
-  return calories;
+
+  updatePaletteDisplay(colors);
 }
 
-function clearForm() {
-  const inputContainers = Array.from(
-    document.querySelectorAll(".input-container")
-  );
-  for (const container of inputContainers) {
-    container.innerHTML = "";
+function generateRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
   }
-  budgetNumberInput.value = "";
-  output.innerText = "";
-  output.classList.add("hide");
+  return color;
 }
 
-addEntryButton.addEventListener("click", addEntry);
-calorieCounter.addEventListener("submit", calculateCalories);
-clearButton.addEventListener("click", clearForm);
+function updatePaletteDisplay(colors) {
+  const colorBoxes = document.querySelectorAll(".color-box");
+
+  colorBoxes.forEach((box, index) => {
+    const color = colors[index];
+    const colorDiv = box.querySelector(".color");
+    const hexValue = box.querySelector(".hex-value");
+
+    colorDiv.style.backgroundColor = color;
+    hexValue.textContent = color;
+  });
+}
+
+// generatePalette();

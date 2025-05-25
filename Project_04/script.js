@@ -1,117 +1,45 @@
+const cards = document.querySelectorAll(".card");
+const lists = document.querySelectorAll(".list");
 
-
-// ---------------------------html element reference -------------------------
-const taskForm = document.getElementById("task-form");
-const openTaskFormBtn = document.getElementById("open-task-form-btn");
-const closeTaskFormBtn = document.getElementById("close-task-form-btn");
-const confirmCloseDialog = document.getElementById("confirm-close-dialog");
-const addOrUpdateTaskBtn = document.getElementById("add-or-update-task-btn");
-const cancelBtn = document.getElementById("cancel-btn");
-const discardBtn = document.getElementById("discard-btn");
-const tasksContainer = document.getElementById("tasks-container");
-const titleInput = document.getElementById("title-input");
-const dateInput = document.getElementById("date-input");
-const descriptionInput  = document.getElementById("description-input");
-
-// -----------------------data-------------------------
-const taskData = JSON.parse(localStorage.getItem("data")) || [];
-let currentTask = {};
-
-
-// -------------------- logic ----------------------------
-
-const deleteTask = (buttonEl) => {
-    const dataArrIndex = taskData.findIndex((item) => item.id === buttonEl.parentElement.id);
-    buttonEl.parentElement.remove();
-    taskData.splice(dataArrIndex, 1);
-    localStorage.setItem("data", JSON.stringify(taskData));
+for (const card of cards) {
+  card.addEventListener("dragstart", dragStart);
+  card.addEventListener("dragend", dragEnd);
 }
 
-const editTask = (buttonEl) => {
-    const dataArrIndex = taskData.findIndex((item) => item.id === buttonEl.parentElement.id);
-    currentTask = taskData[dataArrIndex];
-    titleInput.value = currentTask.title;
-    dateInput.value = currentTask.date;
-    descriptionInput.value = currentTask.description;
-    addOrUpdateTaskBtn.innerText = "Update Task";
-    taskForm.classList.toggle("hidden");
+for (const list of lists) {
+  list.addEventListener("dragover", dragOver);
+  list.addEventListener("dragenter", dragEnter);
+  list.addEventListener("dragleave", dragLeave);
+  list.addEventListener("drop", dragDrop);
 }
 
-const addOrUpdateTask = () => {
-    addOrUpdateTaskBtn.innerText = "Add Task";
-
-    const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
-    const taskObj = {
-        id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
-        title: titleInput.value,
-        date: dateInput.value,
-        description: descriptionInput.value
-    };
-    if (dataArrIndex === -1){
-        taskData.unshift(taskObj);
-    }
-    else{
-        taskData[dataArrIndex] = taskObj;
-    }
-    localStorage.setItem("data", JSON.stringify(taskData));
-    updateTaskContainer();
-    reset();
+function dragStart(e) {
+  // this allows the drop location to know which element is being moved when you release it
+  e.dataTransfer.setData("text/plain", this.id);
 }
 
-const updateTaskContainer = () => {
-    tasksContainer.innerHTML = "";
-    taskData.forEach(({id, title, date, description}) => {
-        tasksContainer.innerHTML += `
-        <div class = "task" id="${id}">
-            <p><strong>Title:</strong> ${title}</p>
-            <p><strong>Date:</strong> ${date}</p>
-            <p><strong>Description:</strong> ${description}</p>
-            <button onclick=editTask(this) class="btn" type="button">Edit</button>
-            <button onclick=deleteTask(this) class="btn" type="button">Delete</button>
-        </div>
-        `;
-    });
+function dragEnd() {
+  console.log("Drag ended");
 }
 
-if (taskData.length){
-    updateTaskContainer();
+function dragOver(e) {
+  // this line is important because by default, browsers don't allow you to drop elements onto other elements.
+  e.preventDefault();
 }
 
-const reset = () =>{
-    titleInput.value = "";
-    dateInput.value = "";
-    descriptionInput.value = "";
-    taskForm.classList.toggle("hidden");
-    currentTask = {};
-};
+function dragEnter(e) {
+  e.preventDefault();
+  this.classList.add("over");
+}
 
+function dragLeave(e) {
+  this.classList.remove("over");
+}
 
-openTaskFormBtn.addEventListener("click", ()=>{
-    taskForm.classList.toggle("hidden");
-}); 
+function dragDrop(e) {
+  const id = e.dataTransfer.getData("text/plain");
+  const card = document.getElementById(id);
 
-closeTaskFormBtn.addEventListener("click", () => {
-    const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
-    const formInputValuesUpdated = titleInput.value != currentTask.title || dateInput.value != currentTask.date || descriptionInput.value != currentTask.description;
-    if (formInputsContainValues && formInputValuesUpdated){
-        confirmCloseDialog.showModal();
-    }
-    else{
-        reset();
-    }
-
-});
-
-cancelBtn.addEventListener("click", ()=>{
-    confirmCloseDialog.close();
-});
-
-discardBtn.addEventListener("click", () => {
-    confirmCloseDialog.close();
-    reset();
-});
-
-taskForm.addEventListener("submit", (e) =>{
-    e.preventDefault();
-    addOrUpdateTask();
-});
+  this.appendChild(card);
+  this.classList.remove("over");
+}

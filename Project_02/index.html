@@ -1,66 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="screen active" id="start-screen">
+        <h1>Quiz Time!</h1>
+        <p>Test your knowledge with these fun questions</p>
+        <button id="start-btn">Start Quiz</button>
+      </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz App</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="style.css">
-</head>
+      <div class="screen" id="quiz-screen">
+        <div class="quiz-header">
+          <h2 id="question-text">Question goes here</h2>
+          <div class="quiz-info">
+            <p>
+              Question <span id="current-question">1</span> of <span id="total-questions">5</span>
+            </p>
 
-<body>
-
-    <div class="score-container">
-        <div class="img-container">
-            <img src="./image/winning.webp" alt="">
+            <p>Score: <span id="score">0</span></p>
+          </div>
         </div>
-        <h2>Congrats!</h2>
-        <h1><span id="score-per">90%</span>Score</h1>
-        <p class="bold">Quiz completed successfully.</p>
-        <p>You attempt <span id="score-total-question">9 questions</span> and from that <span id="score-total-ans">5
-                answer</span> is correct.</p>
-        <button id="restart-btn"><i class="fa-solid fa-rotate-left"></i></button>
+
+        <div id="answers-container" class="answers-container">
+          <!-- Answer buttons will be insterted here from our js code later at some point -->
+        </div>
+
+        <div class="progress-bar">
+          <div id="progress" class="progress"></div>
+        </div>
+      </div>
+
+      <div id="result-screen" class="screen">
+        <h1>Quiz Results</h1>
+        <div class="result-info">
+          <p>You scored <span id="final-score">0</span> out of <span id="max-score">5</span></p>
+
+          <div id="result-message">Good job!</div>
+        </div>
+        <button id="restart-btn">Restart Quiz</button>
+      </div>
     </div>
 
-    <div class="main-container">
-
-        <!-- Upper container ends here  -->
-        <div class="upper-container">
-            <div>
-                <p>Question <span id="question-num">1/5</span></p>
-                <div id="myProgress">
-                    <div id="myBar"></div>
-                </div>
-            </div>
-            <div>
-                <p>Score</p>
-                <p id="score">0</p>
-            </div>
-        </div>
-
-        <!-- Bottom container starts here  -->
-        <div class="bottom-container">
-            <h1 id="question">
-                What does DOM stand for in JavaScript?
-            </h1>
-            <div id="ans-container">
-                <button type="button" class="btn">Answare 1</button>
-                <button type="button" class="btn">Answare 2</button>
-                <button type="button" class="btn">Answare 3</button>
-                <button type="button" class="btn">Answare 4</button>
-            </div>
-            <div class="next-btn-container">
-                <button type="submit" class="next-btn">Next<i class="fa-solid fa-angle-right"></i></button>
-            </div>
-        </div>
-
-
-    </div>
-
-    <script src="./script.js"></script>
-</body>
-
+    <script src="script.js"></script>
+  </body>
 </html>
